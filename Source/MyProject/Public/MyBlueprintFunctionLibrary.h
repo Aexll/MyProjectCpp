@@ -8,6 +8,7 @@
 #include <Kismet/GameplayStatics.h>
 #include "Engine/World.h"
 #include "MyActor.h"
+#include "CppDoor.h"
 
 #include "MyBlueprintFunctionLibrary.generated.h"
 
@@ -20,12 +21,19 @@ class MYPROJECT_API UMyBlueprintFunctionLibrary : public UBlueprintFunctionLibra
 	GENERATED_BODY()
 
 public:
-	UFUNCTION(BlueprintCallable, Category = "truckbidule")
+	UFUNCTION(BlueprintCallable, Category = "Debug")
 		static void Print(FString message);
 
-	UFUNCTION(BlueprintCallable, Category = "truckbidule")
+	UFUNCTION(BlueprintCallable, Category = "Lightning")
 		static void ToggleAllLights();
 
-	UFUNCTION(BlueprintCallable, Category = "truckbidule")
+	UFUNCTION(BlueprintCallable, Category = "Testing")
 		static int ReturnStuff(const FString intext, FString& return_string);
+
+	UFUNCTION(BlueprintCallable, Category = "Doors")
+		static void SetOpenDoorIndex(int index);
+
+	UFUNCTION(BlueprintCallable, Category = "Doors")
+		static void RandomiseAllDoorsIndexs();
+
 };

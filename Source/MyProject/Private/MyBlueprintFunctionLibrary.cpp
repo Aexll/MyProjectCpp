@@ -34,3 +34,45 @@ int UMyBlueprintFunctionLibrary::ReturnStuff(const FString intext, FString& retu
 	return_string = intext;
 	return 42;
 }
+
+void UMyBlueprintFunctionLibrary::SetOpenDoorIndex(int index)
+{
+
+	Print("[DOORS] will open doors");
+	UWorld* world = GEngine->GameViewport->GetWorld();
+
+	TArray<AActor*> Actors;
+	UGameplayStatics::GetAllActorsOfClass(
+		world,
+		ACppDoor::StaticClass(),
+		Actors
+	);
+
+	for (AActor* tmpActor : Actors)
+	{
+
+
+		((ACppDoor*)tmpActor)->OpenDoorIndex(index);
+
+	}
+
+}
+
+void UMyBlueprintFunctionLibrary::RandomiseAllDoorsIndexs()
+{
+	Print("[DOORS] will randomise all doors indexes");
+	UWorld* world = GEngine->GameViewport->GetWorld();
+
+	TArray<AActor*> Actors;
+	UGameplayStatics::GetAllActorsOfClass(
+		world,
+		ACppDoor::StaticClass(),
+		Actors
+	);
+
+	for (AActor* tmpActor : Actors)
+	{
+		((ACppDoor*)tmpActor)->RandomiseIndex();
+	}
+
+}
