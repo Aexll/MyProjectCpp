@@ -13,25 +13,27 @@ ACppCollectible::ACppCollectible()
 	SetActorEnableCollision(true);
 
 	this->SphereCollider = CreateDefaultSubobject<USphereComponent>(TEXT("Sphere collider"));
-	this->SphereCollider->InitSphereRadius(300.0f);
+	this->SphereCollider->InitSphereRadius(50.0f);
 	this->SphereCollider->SetGenerateOverlapEvents(true);
 	this->SphereCollider->SetCollisionProfileName(TEXT("OverlapAllDynamic"));
 	
 	this->SphereCollider->OnComponentBeginOverlap.AddDynamic(this, &ACppCollectible::OnOverlapBegin);
 
 	this->SphereCollider->SetupAttachment(RootComponent);
+	RootComponent = SphereCollider;
 
 
 	// mesh
-	CollectibleMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("DoorMesh"));
-	//CollectibleMesh->SetupAttachment(SphereCollider);
+	this->CollectibleMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Coin Mesh"));
+	this->CollectibleMesh->SetupAttachment(RootComponent);
+	this->CollectibleMesh->SetRelativeScale3D(FVector(0.4f, 0.4f, 0.4f));
 
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> CubeVisualAsset(TEXT("/Game/Models/Door.Door"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> CubeVisualAsset(TEXT("/Game/Models/Coin.Coin"));
 
 	if (CubeVisualAsset.Succeeded()) 
 	{
-		CollectibleMesh->SetStaticMesh(CubeVisualAsset.Object);
-		CollectibleMesh->SetRelativeLocation(FVector(0.0f, 0.0f, 0.0f));
+		this->CollectibleMesh->SetStaticMesh(CubeVisualAsset.Object);
+		this->CollectibleMesh->SetRelativeLocation(FVector(0.0f, 0.0f, 0.0f));
 	}
 
 }
@@ -40,6 +42,13 @@ ACppCollectible::ACppCollectible()
 void ACppCollectible::BeginPlay()
 {
 	Super::BeginPlay();
+
+	UMaterialInstanceDynamic* DynMaterial = UMaterialInstanceDynamic::Create(Material, this);
+
+	FVector4 color(0.9,0.7,0.1,1);
+
+	DynMaterial->SetVectorParameterValue("Color",color);
+	CollectibleMesh->SetMaterial(0, DynMaterial);
 	
 }
 
@@ -48,10 +57,13 @@ void ACppCollectible::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	CollectibleMesh->AddLocalRotation(FQuat(FVector(0,0,1),1 * DeltaTime));
+
 }
 
 void ACppCollectible::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	CollectibleMesh->SetVisibility(false);
+	CollectibleMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 

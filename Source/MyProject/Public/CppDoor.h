@@ -21,6 +21,11 @@ public:
 	UPROPERTY(VisibleAnywhere);
 		UStaticMeshComponent* DoorMesh;
 
+
+	UPROPERTY(EditAnywhere, Category = "Material")
+		UMaterialInterface* DoorMaterial;
+
+
 	//UStaticMeshComponent
 
 protected:

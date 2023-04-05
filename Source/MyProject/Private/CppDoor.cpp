@@ -48,7 +48,33 @@ void ACppDoor::OpenDoorIndex(int index)
 
 void ACppDoor::RandomiseIndex()
 {
-	DoorIndex = FMath::RandRange(0,4);
+	DoorIndex = FMath::RandRange(0,3);
+
+	FVector4 color(0.9,0.7,0.1,1);
+
+	switch (DoorIndex)
+	{
+	case 0:
+		color = FVector4(1,0,0,1);
+		break;
+	case 1:
+		color = FVector4(0,1,0,1);
+		break;
+	case 2:
+		color = FVector4(0,0,1,1);
+		break;
+	case 3:
+		color = FVector4(1,1,0,1);
+		break;
+	default:
+		break;
+	}
+
+	UMaterialInstanceDynamic* DynMaterial = UMaterialInstanceDynamic::Create(DoorMaterial, this);
+
+
+	DynMaterial->SetVectorParameterValue("Color",color);
+	DoorMesh->SetMaterial(0, DynMaterial);
 }
 
 

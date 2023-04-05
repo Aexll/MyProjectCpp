@@ -24,6 +24,9 @@ public:
 	UPROPERTY(VisibleAnywhere);
 		UStaticMeshComponent* CollectibleMesh;
 
+	UPROPERTY(EditAnywhere, Category = "Material")
+		UMaterialInterface* Material;
+
 
 
 protected:
